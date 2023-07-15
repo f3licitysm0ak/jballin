@@ -4,20 +4,25 @@ from qobject import Question
 from userclass import User
 
 app = Flask(__name__)
-
+qlist:List[Question] = list()
 #defining list of type Question + making questions
 
 q1=Question("What is the capital of Japan", "tokyo")
-q2=Question("What is the capital of Miyagi", "sendai")
+qlist.append(q1)
+"""q2=Question("What is the capital of Miyagi", "sendai")
 q3=Question("Which prefecture is Ghibli Park located in? Answer in Hiragana.", "あいち")
 q4=Question("Where did kawara soba originate from? Answer in Hiragana.", "かがわ")
 q5=Question("Which prefecture is Yuzuru Hanyu from?", "miyagi")
-qlist:List[Question] = list()
-qlist.append(q1)
+
+
 qlist.append(q2)
 qlist.append(q3)
 qlist.append(q4)
-qlist.append(q5)
+qlist.append(q5)"""
+
+#commented out hardcoded questions, trying to add them from input
+
+
 
 i=0 #to keep track of current question
 score=0#score of questions correct
@@ -36,9 +41,11 @@ def check(text1):
  
 
 @app.route('/')
-def home():
+def login():
     q=qlist[i].question
-    return render_template('login.html', question=q)
+    return render_template("login.html" )#removed second item question=q
+
+ 
 
 
 @app.route('/next', methods=['GET','POST'])
@@ -51,20 +58,26 @@ def my_form_post():
     check(answer)
     
 
-    if i==4:
+    if i==len(qlist)-1:
         print ("score print")
         i=0
-        return ("<html>Your score is " + str(score) + "/5. Thanks for playing!</html>")
+        return ("<html>Your score is " + str(score) + "/"+ str(len(qlist))+"."+"Thanks for playing!</html>")
     else:
         i = i + 1
         print("next question, i = " + str(i))
         q=qlist[i].question
         print("calling render_template")
         return render_template('home2.html', question=q)
-
-@app.route('/start', methods=['POST'])
+    
+@app.route('/start', methods=[ 'POST']) 
 def start():
     q=qlist[i].question
+    return render_template("home2.html", question=q)
+
+
+@app.route('/home', methods=['POST'])
+def validate():
+    
 
     #declared both username and password as global to avoid that error thing lol
     global usrnm
@@ -74,9 +87,30 @@ def start():
     pwd = request.form['password']
 
     if User.validate_user(usrnm,pwd)==True:
-        return render_template("home2.html", question=q)
+        return render_template("home.html", message="")
     else:
         return render_template("login.html", error="LOGIN FAILED. Please try again with a different username or password.")
+    
+
+#adding new route(s?) for entering questions
+
+@app.route('/qform', methods=['GET'])
+def show_form():
+    return render_template('create.html')
+
+@app.route('/create' , methods=['POST'])
+def add():
+    global pq
+    global pa
+
+    pq=request.form['propq']
+    pa=request.form['propa']
+
+    newq=Question(pq,pa)#creates Question object with pq and pa as question and answer attributes
+    qlist.append(newq)#appents newly made question to the end of the list
+    return render_template("home.html", message="Question successfully created.")
+     
+    
     
 
 @app.route('/logout', methods=['POST'])
