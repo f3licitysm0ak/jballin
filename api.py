@@ -109,8 +109,24 @@ def add():
     newq=Question(pq,pa)#creates Question object with pq and pa as question and answer attributes
     qlist.append(newq)#appents newly made question to the end of the list
     return render_template("home.html", message="Question successfully created.")
-     
     
+#route(s) below for registering new users
+@app.route('/register', methods=['POST'])#might need to add get here if it doesnt work
+def reg():
+    return render_template('register.html')
+
+@app.route('/registered', methods=['POST'])#might need to add get here if it doesnt work
+def regd():
+
+    newu=request.form['cusername']
+    newp=request.form['cpassword']
+
+    new_user=User(newu,newp)
+
+
+    return render_template("login.html", error="Account successfully created.")
+
+
     
 
 @app.route('/logout', methods=['POST'])

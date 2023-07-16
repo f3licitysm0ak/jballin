@@ -5,7 +5,7 @@ class User:
 
     
     #need to make static list of Users shared between all instances of the class? 
-    userDict={"Stefanie":"fansensei","Hana":"hana.winebarger", "Nancy":"nanncdy", "Katelyn":"tarokaite", "Elisabeth":"lizzie.res", "Dristi":"scorched_mint"}
+    userDict={"Stefanie":"fansensei", "Katelyn":"tarokaite"}
 
 
 
@@ -13,6 +13,7 @@ class User:
         self.username=username
         self.passwd=passwd
         self.session_list:List[Session]
+        User.userDict[username]=passwd
     
     def add_session(self, session:Session):
         self.session_list.append(session)
