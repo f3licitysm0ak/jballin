@@ -1,6 +1,7 @@
 body{
-    background-color:powderblue;
+    background-color:linear-gradient(pink,turquoise);
     text-align:center;
-    padding:200px;
+    padding:30%
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+    
 }
-

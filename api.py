@@ -1,26 +1,25 @@
 from typing import List
 from flask import Flask, request, render_template
 from qobject import Question
+from flask_sqlalchemy import SQLAlchemy
+from application import app,db
 from userclass import User
+from datetime import datetime
 
-app = Flask(__name__)
+
+
+
+
+ 
+
 qlist:List[Question] = list()
 #defining list of type Question + making questions
 
 q1=Question("What is the capital of Japan", "tokyo")
 qlist.append(q1)
-"""q2=Question("What is the capital of Miyagi", "sendai")
-q3=Question("Which prefecture is Ghibli Park located in? Answer in Hiragana.", "あいち")
-q4=Question("Where did kawara soba originate from? Answer in Hiragana.", "かがわ")
-q5=Question("Which prefecture is Yuzuru Hanyu from?", "miyagi")
 
 
-qlist.append(q2)
-qlist.append(q3)
-qlist.append(q4)
-qlist.append(q5)"""
-
-#commented out hardcoded questions, trying to add them from input
+ 
 
 
 
@@ -64,9 +63,8 @@ def my_form_post():
         return ("<html>Your score is " + str(score) + "/"+ str(len(qlist))+"."+"Thanks for playing!</html>")
     else:
         i = i + 1
-        print("next question, i = " + str(i))
+        
         q=qlist[i].question
-        print("calling render_template")
         return render_template('home2.html', question=q)
     
 @app.route('/start', methods=[ 'POST']) 
@@ -121,7 +119,11 @@ def regd():
     newu=request.form['cusername']
     newp=request.form['cpassword']
 
-    new_user=User(newu,newp)
+    new_user=User(username=newu, passwd=newp)
+
+    db.session.add(new_user)
+    db.session.commit()
+
 
 
     return render_template("login.html", error="Account successfully created.")
