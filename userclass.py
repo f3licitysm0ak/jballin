@@ -1,6 +1,4 @@
-from typing import List
-from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
+
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from application import db

@@ -1,5 +1,5 @@
 from typing import List
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, session
 from qobject import Question
 from flask_sqlalchemy import SQLAlchemy
 from application import app,db
@@ -22,9 +22,8 @@ qlist.append(q1)
  
 
 
+ 
 
-i=0 #to keep track of current question
-score=0#score of questions correct
 
 #made variables to store username and password for making user object later
 usrnm=""
@@ -32,16 +31,19 @@ pwd=""
 
 
 #checking method for all questions
-def check(text1):
-   global i
-   global score
-   if text1.lower()==qlist[i].answer:
-       score+=1
+def check(text1, ind:int):
+ 
+   
+
+   if text1.lower()==qlist[ind].answer.lower():
+       s=session['score']
+       s=s+1
+       session['score']=s
  
 
 @app.route('/')
 def login():
-    q=qlist[i].question
+ 
     return render_template("login.html" )#removed second item question=q
 
  
@@ -49,33 +51,56 @@ def login():
 
 @app.route('/next', methods=['GET','POST'])
 def my_form_post():
-    global i
-    global score
+ 
+    global qlist
 
+    myIndex:int=session['current_index']
 
     answer = request.form['text1']
-    check(answer)
+    check(answer, myIndex)
+    
+    print ("qlist len=" + str(len(qlist)))
+
     
 
-    if i==len(qlist)-1:
-        print ("score print")
-        i=0
-        return ("<html>Your score is " + str(score) + "/"+ str(len(qlist))+"."+"Thanks for playing!</html>")
-    else:
-        i = i + 1
+    if myIndex==len(qlist)-1:
+         
         
-        q=qlist[i].question
+        return ("<html>Your score is " + str(session['score']) + "/"+ str(len(qlist))+"."+"Thanks for playing!</html>")
+    else:
+        
+
+         
+        myIndex=myIndex+1
+        session['current_index']= myIndex
+        print("Now my Index is " + str(session['current_index']))
+
+        q=qlist[myIndex].question
         return render_template('home2.html', question=q)
     
 @app.route('/start', methods=[ 'POST']) 
 def start():
-    q=qlist[i].question
+    global qlist
+
+     
+    session['current_index']= 0
+    session['score']=0
+
+    qlist=Question.query.all()
+    print ("questions = " + str(qlist))
+    for q in qlist :
+        print ("question = " + q.question)
+        print ("answer = " + q.answer)
+
+
+    q=qlist[0].question
     return render_template("home2.html", question=q)
 
 
 @app.route('/home', methods=['POST'])
 def validate():
     
+
 
     #declared both username and password as global to avoid that error thing lol
     global usrnm
@@ -85,6 +110,8 @@ def validate():
     pwd = request.form['password']
 
     if User.validate_user(usrnm,pwd)==True:
+        session['username']=usrnm
+        print ("User " + session["username"] + " has logged in.")
         return render_template("home.html", message="")
     else:
         return render_template("login.html", error="LOGIN FAILED. Please try again with a different username or password.")
@@ -105,7 +132,8 @@ def add():
     pa=request.form['propa']
 
     newq=Question(pq,pa)#creates Question object with pq and pa as question and answer attributes
-    qlist.append(newq)#appents newly made question to the end of the list
+    db.session.add(newq)
+    db.session.commit()#appends newly made question to database
     return render_template("home.html", message="Question successfully created.")
     
 #route(s) below for registering new users
