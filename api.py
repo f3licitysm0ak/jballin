@@ -25,20 +25,32 @@ qlist.append(q1)
  
 
 
-#made variables to store username and password for making user object later
+#variables to store username and password for making user object later
 usrnm=""
 pwd=""
 
 
 #checking method for all questions
 def check(text1, ind:int):
- 
+
+
    
 
-   if text1.lower()==qlist[ind].answer.lower():
-       s=session['score']
-       s=s+1
-       session['score']=s
+    if text1.lower()==qlist[ind].answer.lower():
+
+       return True
+
+    else:
+       return False  
+
+
+ 
+
+       
+
+
+
+
  
 
 @app.route('/')
@@ -51,6 +63,10 @@ def login():
 
 @app.route('/next', methods=['GET','POST'])
 def my_form_post():
+
+
+
+    
  
     global qlist
 
@@ -58,39 +74,67 @@ def my_form_post():
 
     answer = request.form['text1']
     check(answer, myIndex)
+
+    if check(answer,myIndex):
+        s=session['score']
+        s=s+1
+        session['score']=s
+    else:
+        x=session['incorrect'] #list of questions which were answered incorrectly
+        x.append(qlist[myIndex].question)
+        session['incorrect']=x
+
+        a=session['incorrecta'] #list of correct answers to questions which were answered incorrectly
+        a.append(qlist[myIndex].answer)
+        session['incorrecta']=a
+
+        y=session['incorrect_entries']#list of answers which the user entered that were incorrect
+        y.append(answer)
+        session['incorrect_entries']=y
+
+        print("Question answered incorrectly:" + str(x))
+        print("Correct answer:" + str(a))
+        print("User answered:" + str(y))
+
+           
+
+
     
-    print ("qlist len=" + str(len(qlist)))
+ 
 
     
 
     if myIndex==len(qlist)-1:
          
         
-        return ("<html>Your score is " + str(session['score']) + "/"+ str(len(qlist))+"."+"Thanks for playing!</html>")
-    else:
+        return render_template("score.html", score=session['score'], numqs=len(qlist))
         
 
          
-        myIndex=myIndex+1
-        session['current_index']= myIndex
-        print("Now my Index is " + str(session['current_index']))
+    myIndex=myIndex+1
+    session['current_index']= myIndex
+    
 
-        q=qlist[myIndex].question
-        return render_template('home2.html', question=q)
+    q=qlist[myIndex].question
+    return render_template('home2.html', question=q)
     
 @app.route('/start', methods=[ 'POST']) 
 def start():
     global qlist
 
+
+
      
     session['current_index']= 0
     session['score']=0
 
+    session['incorrect'] =[]
+    session['incorrecta'] = []
+    session['incorrect_entries']=[]
+
     qlist=Question.query.all()
-    print ("questions = " + str(qlist))
-    for q in qlist :
-        print ("question = " + q.question)
-        print ("answer = " + q.answer)
+ 
+
 
 
     q=qlist[0].question
@@ -110,6 +154,7 @@ def validate():
     pwd = request.form['password']
 
     if User.validate_user(usrnm,pwd)==True:
+
         session['username']=usrnm
         print ("User " + session["username"] + " has logged in.")
         return render_template("home.html", message="")
@@ -155,6 +200,23 @@ def regd():
 
 
     return render_template("login.html", error="Account successfully created.")
+
+
+#(attempted) route to display incorrect answers
+@app.route('/view', methods=['POST'])
+def display():
+
+
+    q=session['incorrect']
+    an=session['incorrecta']
+    e=session['incorrect_entries']
+
+    return render_template("view.html", len=len(qlist), questions=q, you_answered=e, correct_answer=an)
+
+
+
+
+
 
 
     
