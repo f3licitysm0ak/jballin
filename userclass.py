@@ -2,13 +2,15 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from application import db
- 
+from dataclasses import dataclass
+
+@dataclass 
 class User(db.Model):
-    id=db.Column(db.Integer, primary_key=True)
-    username=db.Column(db.String(200), nullable=False)
-    passwd=db.Column(db.String(200), nullable=False) 
-    date_created=db.Column(db.DateTime, default=datetime.utcnow)
-    is_admin=db.Column(db.Boolean,nullable=False, default=False)
+    id:int=db.Column(db.Integer, primary_key=True)
+    username:str=db.Column(db.String(200), nullable=False)
+    passwd:str=db.Column(db.String(200), nullable=False) 
+    date_created:datetime=db.Column(db.DateTime, default=datetime.utcnow)
+    is_admin:bool=db.Column(db.Boolean,nullable=False, default=False)
 
 
 

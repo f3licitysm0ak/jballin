@@ -1,7 +1,11 @@
-body{
-    background-color:linear-gradient(pink,turquoise);
+
+
+
+head{
+    background-image:linear-gradient(orange,purple);
     text-align:center;
-    padding:30%
-    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+    padding:10%;
+    font-family:sans-serif;
+    
     
 }

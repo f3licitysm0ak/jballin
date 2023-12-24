@@ -1,16 +1,44 @@
 <!DOCTYPE html>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<head>
+    <style>
+        [class*="col"]{
+            padding:1rem;
+            background-color:lightpink;
+            border: 5px solid #ffffff;
+            color:black;
+
+        }
+    </style>
+</head>
 <body>
-<ol>
  
+<div
+class="bg-image d-flex justify-content-center align-items-center"
+style="
+background-image: url('https://mdbcdn.b-cdn.net/img/new/fluid/nature/015.webp');
+height: 100vh;">
+    <div class="container-md border p-5 my-5">
     {%for i in range(0, len)%}
       
-        <li>Question: {{questions[i]}}</li><br><br>
-        <li>You answered: {{you_answered[i]}}</li><br><br>
-        <li>Correct answer: {{correct_answer[i]}}</li><br><br>
+        
+            <div class="row mx-auto d-block">
+                <div class="col rounded">Question: {{questions[i]}}<br>
+                You answered: {{you_answered[i]}}<br>
+                Correct answer: {{correct_answer[i]}} <br></div>
+               
+            </div>
+        
 
     {%endfor%}
+    <a href="http://127.0.0.1:5000/">Log Out</a>
+    </div>
 
-</ol>
+    
+    
+</div>
 </body>
 
 

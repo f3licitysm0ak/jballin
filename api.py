@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from application import app,db
 from userclass import User
 from datetime import datetime
+from dataclasses import dataclass
 
 
 
@@ -12,11 +13,9 @@ from datetime import datetime
 
  
 
-qlist:List[Question] = list()
-#defining list of type Question + making questions
 
-q1=Question("What is the capital of Japan", "tokyo")
-qlist.append(q1)
+
+
 
 
  
@@ -35,8 +34,10 @@ def check(text1, ind:int):
 
 
    
-
-    if text1.lower()==qlist[ind].answer.lower():
+    qlist=session['qlist']
+    print(ind)
+    print(qlist[ind])
+    if text1.lower()==qlist[ind]['answer'].lower():
 
        return True
 
@@ -58,7 +59,6 @@ def login():
  
     return render_template("login.html" )#removed second item question=q
 
- 
 
 
 @app.route('/next', methods=['GET','POST'])
@@ -68,24 +68,25 @@ def my_form_post():
 
     
  
-    global qlist
+    qlist=session['qlist']
 
     myIndex:int=session['current_index']
 
     answer = request.form['text1']
     check(answer, myIndex)
 
+   
     if check(answer,myIndex):
         s=session['score']
         s=s+1
         session['score']=s
     else:
         x=session['incorrect'] #list of questions which were answered incorrectly
-        x.append(qlist[myIndex].question)
+        x.append(qlist[myIndex]['question'])
         session['incorrect']=x
 
         a=session['incorrecta'] #list of correct answers to questions which were answered incorrectly
-        a.append(qlist[myIndex].answer)
+        a.append(qlist[myIndex]['answer'])
         session['incorrecta']=a
 
         y=session['incorrect_entries']#list of answers which the user entered that were incorrect
@@ -115,13 +116,14 @@ def my_form_post():
     session['current_index']= myIndex
     
 
-    q=qlist[myIndex].question
-    return render_template('home2.html', question=q)
+    q=qlist[myIndex]['question']
+    i=qlist[myIndex]['img']
+    return render_template('home2.html', question=q, image=i)
     
 @app.route('/start', methods=[ 'POST']) 
 def start():
-    global qlist
-
+    qlist:List[Question] = list()
+    #defining list of type Question + making questions
 
 
      
@@ -133,6 +135,8 @@ def start():
     session['incorrect_entries']=[]
 
     qlist=Question.query.all()
+
+    session['qlist']=qlist
  
 
 
@@ -157,7 +161,7 @@ def validate():
 
         session['username']=usrnm
         print ("User " + session["username"] + " has logged in.")
-        return render_template("home.html", message="")
+        return render_template("home.html", user=usrnm)
     else:
         return render_template("login.html", error="LOGIN FAILED. Please try again with a different username or password.")
     
@@ -170,13 +174,15 @@ def show_form():
 
 @app.route('/create' , methods=['POST'])
 def add():
-    global pq
-    global pa
+    #global pq
+    #global pa
+    #global img 
 
     pq=request.form['propq']
     pa=request.form['propa']
+    img=request.form['image']
 
-    newq=Question(pq,pa)#creates Question object with pq and pa as question and answer attributes
+    newq=Question(pq,pa,img)#creates Question object with pq and pa as question and answer attributes
     db.session.add(newq)
     db.session.commit()#appends newly made question to database
     return render_template("home.html", message="Question successfully created.")
@@ -211,7 +217,7 @@ def display():
     an=session['incorrecta']
     e=session['incorrect_entries']
 
-    return render_template("view.html", len=len(qlist), questions=q, you_answered=e, correct_answer=an)
+    return render_template("view.html", len=len(q), questions=q, you_answered=e, correct_answer=an)
 
 
 
