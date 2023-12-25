@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-  <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
+
+ 
+  </header>
   <div class="text-center text-light bg-dark">
     <!DOCTYPE html>
     <html lang="en">
@@ -12,20 +15,50 @@
     <body>
     
     
-    <h1>Welcome, {{user}}! </h1>
+    <h2>welcome, {{user}}! </h2>
+
+    <br><br>
+
+    <h1>108</h1>
+    <h3>days to competition</h3>
+
+
+    <br><br><br>
+
+
+  
+
+    <div class="justify-content-center align-items-center">
+       
+        <form action="http://127.0.0.1:5000/start" method="post">
+          <button>Take Practice Test</button>
+    
+        </form><br><br>
+    
+
+      
+      
+        <form action="http://127.0.0.1:5000/qform" method="get">
+          <button>Add Question</button>
+        </form><br><br>
+    
+
+      
+        <form action="http://127.0.0.1:5000" method="get">
+          <button>Log Out</button>
+        </form><br><br>
+
+    
+    </div>
+
+
     </body>
     </html>
 
-
-
-    <form action="http://127.0.0.1:5000/start" method="post">
-        <button>Take Practice Test</button>
     
-    </form>
+    
 
-    <form action="http://127.0.0.1:5000/qform" method="get">
-        <button>Add Question</button>
-   </form>
+  
   
   </div>
 
