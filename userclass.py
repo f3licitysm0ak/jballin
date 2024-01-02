@@ -31,12 +31,12 @@ class User(db.Model):
         u=User.query.filter(User.username==usrn).first()
         if u:
             if u.passwd==pw:
-                return True
+                return u
             else:
-                return False
+                return None
             
         else:
-            return False
+            return None
          
         
 

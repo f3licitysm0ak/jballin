@@ -6,6 +6,7 @@ from application import app,db
 from userclass import User
 from datetime import datetime
 from dataclasses import dataclass
+from testinfo import TestInfo
 
 
 
@@ -107,6 +108,10 @@ def my_form_post():
 
     if myIndex==len(qlist)-1:
          
+        new_test=TestInfo(session['userid'], session['score'], len(qlist))
+
+        db.session.add(new_test)
+        db.session.commit()
         
         return render_template("score.html", score=session['score'], numqs=len(qlist))
         
@@ -120,7 +125,7 @@ def my_form_post():
     i=qlist[myIndex]['img']
     return render_template('home2.html', question=q, image=i)
     
-@app.route('/start', methods=[ 'POST']) 
+@app.route('/start', methods=['GET']) 
 def start():
     qlist:List[Question] = list()
     #defining list of type Question + making questions
@@ -134,7 +139,7 @@ def start():
     session['incorrecta'] = []
     session['incorrect_entries']=[]
 
-    qlist=Question.query.all()
+    qlist=Question.query.all() #retrieving the questions from the database!
 
     session['qlist']=qlist
  
@@ -157,9 +162,13 @@ def validate():
     usrnm = request.form['username']
     pwd = request.form['password']
 
-    if User.validate_user(usrnm,pwd)==True:
+    u=User.validate_user(usrnm,pwd)
 
-        session['username']=usrnm
+    if u is not None:
+
+        session['username']=u.username
+        session['userid']=u.id
+
         print ("User " + session["username"] + " has logged in.")
         return render_template("home.html", user=usrnm)
     else:
