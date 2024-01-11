@@ -1,23 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+      
+
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
+    </head>
+
+<div class="card-body" style="border-radius:6px; background-color:#D57E8C;">
     <form action="http://127.0.0.1:5000/create" method="post">
         
-        <label>Enter your question here:</label>
+        <label style="color:white;">Enter your question here:</label>
         <input type="text" id="propq" name="propq" required><br><br>
 
-        <label>Enter your answer here:</label>
+        <label style="color:white;">Enter your answer here:</label>
         <input type="text" id="propa" name="propa" required><br><br>
 
         <!--third field for adding accompanying image-->
-        <label>Enter image url here:</label>
+        <label style="color:white;">Enter image url here:</label>
         <input type="text" id="img_link" name="image"><br><br>
 
 
 
-        <button type="submit">Add</button><br><br>
+        <button class="btn-sm round">Add</button><br><br>
         
 
     </form>
+</div>
 
 
 

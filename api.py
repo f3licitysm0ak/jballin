@@ -139,7 +139,7 @@ def start():
     session['incorrecta'] = []
     session['incorrect_entries']=[]
 
-    qlist=Question.query.all() #retrieving the questions from the database!
+    qlist=Question.query.all() #retrieving the questions from the database
 
     session['qlist']=qlist
  
@@ -170,7 +170,12 @@ def validate():
         session['userid']=u.id
 
         print ("User " + session["username"] + " has logged in.")
-        return render_template("home.html", user=usrnm)
+
+        #make a list of past attempts so far here
+        testlist:List[TestInfo] = list()
+        testlist=TestInfo.query.filter(TestInfo.user_id==u.id).all() #Trying to fetch only tests whose user id matches the current user's id
+         
+        return render_template("home.html", user=usrnm, len=len(testlist), attempts=testlist)
     else:
         return render_template("login.html", error="LOGIN FAILED. Please try again with a different username or password.")
     

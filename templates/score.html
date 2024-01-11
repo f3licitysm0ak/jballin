@@ -1,9 +1,20 @@
 <!DOCTYPE html>
-<html>Your score is {{score}}/{{numqs}}. Thanks for playing!<br><br>
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+      
+
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
+
+</head>
+<div class="card-body" style="border-radius:6px; background-color:#D57E8C;">
+<html>
+<p style="color:white;">Your score is {{score}}/{{numqs}}. Thanks for playing!</p>
 
 <form action="http://127.0.0.1:5000/view" method="post">
-<button id="next" type="submit">View Incorrect Answers</button><br><br> 
+<button class="btn-sm round">View Incorrect Answers</button><br><br> 
 </form>
-
-
-<a href=http://127.0.0.1:5000> Log Out</a><br><br> </html>
+<form action="http://127.0.0.1:5000">
+    <button class="btn-sm round">Log Out</button>
+</form>
+ 
+</div>

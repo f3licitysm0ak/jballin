@@ -19,3 +19,19 @@ class TestInfo(db.Model):
         self.user_id=user_id
         self.score=score
         self.numqs=numqs
+
+
+    def getscore(self):
+        return self.score
+        
+
+    def getdate(self):
+        return self.date_taken
+        
+
+    def getnumqs(self):
+        return self.numqs
+        
+
+   
+        

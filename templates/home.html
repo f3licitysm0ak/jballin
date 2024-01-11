@@ -22,8 +22,8 @@
 
 
       
-      <div class="row">
-        <div class="col wf"><br>
+      <div class="row"> <!--top row, currently contains welcome message & action buttons, time to competition, and gdrive links-->
+        <div class="col wf"><br><!--start of "top left panel"-->
           <div class="card-body" style="border-radius:6px; background-color:#D57E8C;">
             <h2 style="color:white;">welcome, {{user}}!</h2>
            
@@ -40,20 +40,20 @@
               <button class="btn-sm round">Log Out</button>
             </form>
           </div>
-      </div>
+        </div><!--end of "top left panel"-->
       
         
           
 
-            <div class="col wf"><br>
+        <div class="col wf"><br>
 
 
             
-              <div class="card-body" style="border-radius:6px; background-color:#D57E8C;">
-                <h4 style="color:white;">time to competition:</h4>
-                <!--timer-->
-                <h3 style="color:white;" id="demo"></h3>
-              </div>
+          <div class="card-body" style="border-radius:6px; background-color:#D57E8C;">
+            <h4 style="color:white;">time to competition:</h4>
+            <!--timer-->
+            <h3 style="color:white;" id="demo"></h3>
+          </div>
             <br>
           
           <div class="card-body" style="border-radius:6px; background-color:#D57E8C;">
@@ -70,15 +70,15 @@
 
       </div>
 
-      <div class="row">
-        <div class="col">
+      <div class="row wf"><!--second row, with teams and past attempts display-->
+        <div class="col wf"><!--bottom left panel start-->
           
 
           <div class="card-body" style="border-radius:6px; background-color:#D57E8C;"><!--start of pink card body-->
             <div class="row wf">
               <h2 style="color:white;">teams</h2>
 
-              <div class="col">
+              <div class="col wf">
                 <div class="card-body" style="border-radius:6px; background-color:white;">
                   <img src="https://japanbowl.org/wp-content/uploads/2023/06/JBD2-1709-1-scaled.jpg" class="card-img" alt="...">
 
@@ -87,7 +87,7 @@
                 </div>
               </div>
 
-              <div class="col">
+              <div class="col wf">
                 <div class="card-body" style="border-radius:6px; background-color:white;">
 
                   <img src="https://japanbowl.org/wp-content/uploads/2023/06/JBD1-1765-scaled.jpg" class="card-img" alt="...">
@@ -98,7 +98,7 @@
                 </div>
               </div>
 
-              <div class="col">
+              <div class="col wf">
                 <div class="card-body" style="border-radius:6px; background-color:white;">
 
                   <img src="https://japanbowl.org/wp-content/uploads/2023/06/JBD1-1930-1-scaled.jpg" class="card-img" alt="...">
@@ -111,16 +111,53 @@
 
 
 
-            </div>
-          </div><!--end of pink card body-->
-
-
+            </div> 
+          </div> 
         </div>
+
+
         <div class="col wf">
-          <div class="row wf">testing..</div>
+          
+            <div class="card-body" style="border-radius:6px; background-color:#D57E8C;"><!--start of pink card body-->
+            
+              <h2 style="color:white;">past attempts</h2>
+              <div class="row wf">
+                
+                  <!--displaying each attempt-->
+                    
+                  
+                  <!--displaying each attempt END-->
+              
+                
+                <!--table attempt-->
+                <table class="table">
+                  <thead>
+                    <tr>
+                      
+                      <th scope="col">Date</th>
+                      <th scope="col">Score</th>
+                      
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                    {%for i in range(0, len)%}
+                    <tr class="table">
+                      <td>{{attempts[i].getdate()}}</td>
+                      <td>{{attempts[i].getscore()}} / {{attempts[i].getnumqs()}}</td>
+                    </tr>
+                    {%endfor%}
+                  </tbody>
+                </table>
+
+                <!--table attempt END-->
+              </div>
+              
+            </div><!--end of pink card body-->
         </div>
+        
          
-      </div>
+        </div><!--end of second row-->
 
 
   
