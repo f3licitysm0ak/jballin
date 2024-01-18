@@ -17,7 +17,13 @@
     </head>
     <body>
     
-  
+    {% with messages = get_flashed_messages()%}
+      {% if messages%}
+        {% for message in messages%}
+          <p style="color:#D57E8C;">{{message}}</p>
+        {%endfor%}
+      {%endif%}
+    {%endwith%}
     <div class="container" ><!--container for attempting bootstrap stuff-->
 
 
@@ -28,15 +34,15 @@
             <h2 style="color:white;">welcome, {{user}}!</h2>
            
             <br>
-            <form action="http://127.0.0.1:5000/start" method="get">
+            <form action="/start" method="get">
               <button class="btn-sm round">Take Practice Test</button>
             </form>
             <br>
-            <form action="http://127.0.0.1:5000/qform" method="get">
+            <form action="/qform" method="get">
               <button class="btn-sm round">Add Question</button>
             </form>
             <br>
-            <form action="http://127.0.0.1:5000" method="get">
+            <form action="/logout" method="post">
               <button class="btn-sm round">Log Out</button>
             </form>
           </div>
@@ -134,8 +140,8 @@
                   <thead>
                     <tr>
                       
-                      <th scope="col">Date</th>
-                      <th scope="col">Score</th>
+                      <th scope="col" style="color:white;">Date</th>
+                      <th scope="col" style="color:white;">Score</th>
                       
                     </tr>
                   </thead>
@@ -143,8 +149,8 @@
 
                     {%for i in range(0, len)%}
                     <tr class="table">
-                      <td>{{attempts[i].getdate()}}</td>
-                      <td>{{attempts[i].getscore()}} / {{attempts[i].getnumqs()}}</td>
+                      <td style="color:white;">{{attempts[i].getdate()}}</td>
+                      <td style="color:white;">{{attempts[i].getscore()}} / {{attempts[i].getnumqs()}}</td>
                     </tr>
                     {%endfor%}
                   </tbody>

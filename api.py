@@ -1,5 +1,5 @@
 from typing import List
-from flask import Flask, request, render_template, session
+from flask import Flask, request, render_template, session, flash, redirect, request, url_for
 from qobject import Question
 from flask_sqlalchemy import SQLAlchemy
 from application import app,db
@@ -149,15 +149,8 @@ def start():
     q=qlist[0].question
     return render_template("home2.html", question=q)
 
-
-@app.route('/home', methods=['POST'])
-def validate():
-    
-
-
-    #declared both username and password as global to avoid that error thing lol
-    global usrnm
-    global pwd
+@app.route('/loginuser', methods=['POST'])
+def login_user():
 
     usrnm = request.form['username']
     pwd = request.form['password']
@@ -170,12 +163,26 @@ def validate():
         session['userid']=u.id
 
         print ("User " + session["username"] + " has logged in.")
+        return redirect('/home')
+        
+    else:
+        return render_template("login.html", error="LOGIN FAILED. Please try again with a different username or password.")
 
+@app.route('/home', methods=['GET'])
+def home():
+     
+
+
+    usrnm=session['username']
+    id=session['userid']
+    if id:
         #make a list of past attempts so far here
         testlist:List[TestInfo] = list()
-        testlist=TestInfo.query.filter(TestInfo.user_id==u.id).all() #Trying to fetch only tests whose user id matches the current user's id
-         
-        return render_template("home.html", user=usrnm, len=len(testlist), attempts=testlist)
+        testlist=TestInfo.query.filter(TestInfo.user_id==id).all() #Trying to fetch only tests whose user id matches the current user's id
+        if testlist:
+            return render_template("home.html", user=usrnm, len=len(testlist), attempts=testlist)
+        else:
+            return render_template("home.html", user=usrnm, len=0, attempts=[])
     else:
         return render_template("login.html", error="LOGIN FAILED. Please try again with a different username or password.")
     
@@ -199,7 +206,9 @@ def add():
     newq=Question(pq,pa,img)#creates Question object with pq and pa as question and answer attributes
     db.session.add(newq)
     db.session.commit()#appends newly made question to database
-    return render_template("home.html", message="Question successfully created.")
+    flash('Question successfully created.')
+    return redirect('/home')
+
     
 #route(s) below for registering new users
 @app.route('/register', methods=['POST'])#might need to add get here if it doesnt work
@@ -241,7 +250,7 @@ def display():
 
     
 
-@app.route('/logout', methods=['POST'])
+@app.route('/logout', methods=['GET','POST'])
 def logout():
     return render_template("login.html", error="")
 
