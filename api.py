@@ -125,21 +125,23 @@ def my_form_post():
     i=qlist[myIndex]['img']
     return render_template('home2.html', question=q, image=i)
     
-@app.route('/start', methods=['GET']) 
+@app.route('/start', methods=['POST']) 
 def start():
     qlist:List[Question] = list()
     #defining list of type Question + making questions
+    
+    week_num = request.form['week']
 
-
-     
+    
     session['current_index']= 0
     session['score']=0
 
     session['incorrect'] =[]
     session['incorrecta'] = []
     session['incorrect_entries']=[]
+    
 
-    qlist=Question.query.all() #retrieving the questions from the database
+    qlist=Question.query.filter_by(weeknum=week_num).all() #retrieving the questions from the database which are from the selected week
 
     session['qlist']=qlist
  
@@ -195,15 +197,14 @@ def show_form():
 
 @app.route('/create' , methods=['POST'])
 def add():
-    #global pq
-    #global pa
-    #global img 
-
+    
+    wn=request.form['week']
     pq=request.form['propq']
     pa=request.form['propa']
     img=request.form['image']
 
-    newq=Question(pq,pa,img)#creates Question object with pq and pa as question and answer attributes
+    newq=Question(pq,pa,img,wn)#creates Question object with pq and pa as question and img and weeknum
+    newq.set_creator(session['userid']) #setting creator to whoever is currently logged in 
     db.session.add(newq)
     db.session.commit()#appends newly made question to database
     flash('Question successfully created.')

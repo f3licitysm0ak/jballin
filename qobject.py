@@ -13,17 +13,23 @@ class Question(db.Model):
     img:str=db.Column(db.String(500), nullable=False)
     date_created:datetime=db.Column(db.DateTime, default=datetime.utcnow)
     created_by:int=db.Column(db.Integer, db.ForeignKey(User.id), nullable=True)
-    
+    weeknum:int=db.Column(db.Integer, nullable=False)#new "week" category, should only be like 1 to 10ish bc thats how many weeks left heheh
     creator=relationship('User', foreign_keys='Question.created_by')
+
     
 
     
     
-    def __init__(self, question, answer,img):
+    def __init__(self, question, answer,img, weeknum):
         self.question=question
         self.answer=answer
         self.img=img
+        self.weeknum=weeknum
+        
     def set_answer(self, user_ans ):
         self.user_ans=user_ans
+        
+    def set_creator(self, userid):
+        self.created_by=userid
 
     

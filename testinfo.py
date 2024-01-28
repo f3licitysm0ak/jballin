@@ -12,6 +12,7 @@ class TestInfo(db.Model):
     score=db.Column(db.Integer, nullable=False) #this is just the raw score, ex. if 30/60 then score=30
     numqs=db.Column(db.Integer, nullable=False)#total number of questions in the test at that time(hopefully)
     
+    
 
 
     def __init__(self, user_id, score, numqs):

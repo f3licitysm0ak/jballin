@@ -34,7 +34,24 @@
             <h2 style="color:white;">welcome, {{user}}!</h2>
            
             <br>
-            <form action="/start" method="get">
+            <form action="/start" method="post">
+              <!--week drop down menu incoming-->
+              <label for="weeks" style="color:white;">Choose a week:</label>
+
+              <select name="week" id="week" style="color:#D57E8C">
+                  <option value="1" style="color:#D57E8C">1</option>
+                  <option value="2" style="color:#D57E8C">2</option>
+                  <option value="3" style="color:#D57E8C">3</option>
+                  <option value="4" style="color:#D57E8C">4</option>
+                  <option value="5" style="color:#D57E8C">5</option>
+                  <option value="6" style="color:#D57E8C">6</option>
+                  <option value="7" style="color:#D57E8C">7</option>
+                  <option value="8" style="color:#D57E8C">8</option>
+                  <option value="9" style="color:#D57E8C">9</option>
+                  <option value="10" style="color:#D57E8C">10</option>
+                  <option value="11" style="color:#D57E8C">11</option>
+              </select>
+              <!--week drop down menu END-->
               <button class="btn-sm round">Take Practice Test</button>
             </form>
             <br>
