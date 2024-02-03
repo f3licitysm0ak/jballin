@@ -12,33 +12,52 @@
 
         }
     </style>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+      
+
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
 </head>
 <body>
  
-<div
-class="bg-image d-flex justify-content-center align-items-center"
-style="
-background-image: url('https://www.studentuniverse.com/blog/wp-content/uploads/2018/02/japan-featured-image.jpg');
-height: 100vh;">
-    <div class="container-md border p-5 my-5">
+
+    <div class="container-md p-3 my-3"> 
     {%for i in range(0, len)%}
       
         
-            <div class="row mx-auto d-block">
-                <div class="col rounded">Question: {{questions[i]}}<br>
-                You answered: {{you_answered[i]}}<br>
-                Correct answer: {{correct_answer[i]}} <br></div>
+            <!--<div class="row mx-auto d-block">-->
+                <div class="col" style="color:white; border-radius:10px;">Question: {{testdetails[i].question}}<br>
+                You answered: {{testdetails[i].answer}}<br>
+                Correct answer: {{testdetails[i].user_answered}} <br></div>
                
-            </div>
+            <!--</div>-->
         
 
     {%endfor%}
-    <a href="/logout">Log Out</a>
+
+   
+        <table style>
+            <tr>
+                <td style="padding:1rem;">
+                    <form action="/home" method="get">
+                        <button class="btn-sm round" style="background-color:#D57E8C; color:white;">Home</button>
+                    </form>
+                </td>
+                <td style="padding:1rem;">
+                    <form action="/logout" method="get">
+                        <button class="btn-sm round" style="background-color:#D57E8C; color:white;">Log Out</button>
+                    </form>
+                </td>
+                
+            </tr>
+        </table>
+    
+    
     </div>
 
     
     
-</div>
+
 </body>
 
 

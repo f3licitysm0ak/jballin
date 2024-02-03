@@ -11,7 +11,8 @@
 <p style="color:white;">Your score is {{score}}/{{numqs}}. Thanks for playing!</p>
 
 <form action="/view" method="post">
-<button class="btn-sm round">View Incorrect Answers</button><br><br> 
+    <button class="btn-sm round">View Details</button><br><br> 
+    <input type="hidden" id="attempt_id" name="attempt_id" value={{attempt_id}}>
 </form>
 <form action="/logout">
     <button class="btn-sm round">Log Out</button>

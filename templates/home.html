@@ -106,7 +106,7 @@
                   <img src="https://japanbowl.org/wp-content/uploads/2023/06/JBD2-1709-1-scaled.jpg" class="card-img" alt="...">
 
                   <h2 style="color:#D57E8C;">level 2</h2>
-                  <a href="https://docs.google.com/document/d/1gdnRVnVC3niXBeI6KR3F7C7L8SA0Zc-UmNSnLa-FA_Y/edit" style="background-color:#D57E8C; color:white;">sentences</a>
+                  <a href="https://docs.google.com/document/d/1gdnRVnVC3niXBeI6KR3F7C7L8SA0Zc-UmNSnLa-FA_Y/edit" style="color:#D57E8C;">sentences</a>
                 </div>
               </div>
 
@@ -116,7 +116,7 @@
                   <img src="https://japanbowl.org/wp-content/uploads/2023/06/JBD1-1765-scaled.jpg" class="card-img" alt="...">
 
                   <h2 style="color:#D57E8C;">level 3</h2>
-                  <a href="https://docs.google.com/document/d/1MBZzhVd1tjWinS-4R7yGYOgXlk02nmp2kO1IOk31LTg/edit" style="background-color:#D57E8C; color:white;">sentences</a>
+                  <a href="https://docs.google.com/document/d/1MBZzhVd1tjWinS-4R7yGYOgXlk02nmp2kO1IOk31LTg/edit" style="color:#D57E8C;">sentences</a>
 
                 </div>
               </div>
@@ -127,7 +127,7 @@
                   <img src="https://japanbowl.org/wp-content/uploads/2023/06/JBD1-1930-1-scaled.jpg" class="card-img" alt="...">
 
                   <h2 style="color:#D57E8C;">level 4</h2>
-                  <a href="https://docs.google.com/document/d/1nQdiG1WB_qmM_BEyxp7UoZXdokDIH8L0363fJV5pAMA/edit?usp=sharing" style="background-color:#D57E8C; color:white;">sentences</a>
+                  <a href="https://docs.google.com/document/d/1nQdiG1WB_qmM_BEyxp7UoZXdokDIH8L0363fJV5pAMA/edit?usp=sharing" style="color:#D57E8C;">sentences</a>
 
                 </div>
               </div>
@@ -157,17 +157,28 @@
                   <thead>
                     <tr>
                       
+                      <th scope="col" style="color:white;">Week</th>
                       <th scope="col" style="color:white;">Date</th>
                       <th scope="col" style="color:white;">Score</th>
+                      <th scope="col" style="color:white;">Review</th>
+                      
                       
                     </tr>
                   </thead>
+
                   <tbody>
 
                     {%for i in range(0, len)%}
-                    <tr class="table">
+                    <tr>
+                      <td style="color:white;">{{attempts[i].getweek()}}</td>
                       <td style="color:white;">{{attempts[i].getdate()}}</td>
                       <td style="color:white;">{{attempts[i].getscore()}} / {{attempts[i].getnumqs()}}</td>
+                      <td style="color:white;">
+                        <form action="/view" method="post">
+                          <button class="btn-sm round">View Details</button> 
+                          <input type="hidden" id="attempt_id" name="attempt_id" value={{attempts[i].id}}>
+                        </form>
+                      </td>
                     </tr>
                     {%endfor%}
                   </tbody>

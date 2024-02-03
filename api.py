@@ -7,6 +7,7 @@ from userclass import User
 from datetime import datetime
 from dataclasses import dataclass
 from testinfo import TestInfo
+from testdetails import TestDetails
 
 
 
@@ -81,22 +82,24 @@ def my_form_post():
         s=session['score']
         s=s+1
         session['score']=s
-    else:
-        x=session['incorrect'] #list of questions which were answered incorrectly
-        x.append(qlist[myIndex]['question'])
-        session['incorrect']=x
 
-        a=session['incorrecta'] #list of correct answers to questions which were answered incorrectly
-        a.append(qlist[myIndex]['answer'])
-        session['incorrecta']=a
+    x=session['incorrect'] #labeled as incorrect but actually ALL questions in the current session
+    x.append(qlist[myIndex]['question'])
+    session['incorrect']=x
+    
 
-        y=session['incorrect_entries']#list of answers which the user entered that were incorrect
-        y.append(answer)
-        session['incorrect_entries']=y
+    a=session['incorrecta'] #list of correct answers to ALL questions in current session(mislabeled)
+    a.append(qlist[myIndex]['answer'])
+    session['incorrecta']=a
 
-        print("Question answered incorrectly:" + str(x))
-        print("Correct answer:" + str(a))
-        print("User answered:" + str(y))
+    y=session['incorrect_entries']#list of answers which the user entered that were incorrect
+    y.append(answer)
+    session['incorrect_entries']=y
+
+
+    print("Question answered:" + str(x))
+    print("Correct answer:" + str(a))
+    print("User answered:" + str(y))
 
            
 
@@ -108,12 +111,30 @@ def my_form_post():
 
     if myIndex==len(qlist)-1:
          
-        new_test=TestInfo(session['userid'], session['score'], len(qlist))
+        new_test=TestInfo(session['userid'], session['score'], len(qlist), session['weeknum'])
 
-        db.session.add(new_test)
-        db.session.commit()
+        db.session.add(new_test)#adding the info of the test that was just taken to testinfo(date and score only as of now)
+        db.session.flush()
+        #db.session.commit()
         
-        return render_template("score.html", score=session['score'], numqs=len(qlist))
+
+
+        db.session.refresh(new_test) 
+        attempt_id=new_test.id
+        print('attempt id:' + str(attempt_id))
+        q=session['incorrect']
+        a=session['incorrecta']
+        ue=session['incorrect_entries'] #retrieving all the users entries (not just entries to incorrectly answered questions, name is misleading) for the current session
+        
+        for i in range(len(q)):
+            t=TestDetails(attempt_id,q[i],a[i],ue[i])
+            db.session.add(t)
+
+        db.session.commit()
+
+            
+        
+        return render_template("score.html", score=session['score'], numqs=len(qlist), attempt_id=attempt_id )
         
 
          
@@ -139,6 +160,8 @@ def start():
     session['incorrect'] =[]
     session['incorrecta'] = []
     session['incorrect_entries']=[]
+
+    session['weeknum']=week_num
     
 
     qlist=Question.query.filter_by(weeknum=week_num).all() #retrieving the questions from the database which are from the selected week
@@ -232,16 +255,21 @@ def regd():
     return render_template("login.html", error="Account successfully created.")
 
 
-#(attempted) route to display incorrect answers
-@app.route('/view', methods=['POST'])
+#route to display incorrect answers
+@app.route('/view', methods=['POST','GET'])
 def display():
 
 
-    q=session['incorrect']
+    '''q=session['incorrect']
     an=session['incorrecta']
-    e=session['incorrect_entries']
+    e=session['incorrect_entries']'''
 
-    return render_template("view.html", len=len(q), questions=q, you_answered=e, correct_answer=an)
+    attempt_id = request.form['attempt_id']
+    test_info=TestInfo.query.filter_by(id=attempt_id).all()
+    test_details=TestDetails.query.filter_by(attempt_id=attempt_id).all()
+    
+
+    return render_template("view.html", len=len(test_details), testdetails=test_details)
 
 
 

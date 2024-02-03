@@ -11,15 +11,16 @@ class TestInfo(db.Model):
     date_taken:datetime=db.Column(db.DateTime, default=datetime.utcnow)
     score=db.Column(db.Integer, nullable=False) #this is just the raw score, ex. if 30/60 then score=30
     numqs=db.Column(db.Integer, nullable=False)#total number of questions in the test at that time(hopefully)
-    
+    weeknum:int=db.Column(db.Integer, nullable=False)#new "week" category, should only be like 1 to 10ish bc thats how many weeks left heheh
     
 
 
-    def __init__(self, user_id, score, numqs):
+    def __init__(self, user_id, score, numqs, weeknum):
      
         self.user_id=user_id
         self.score=score
         self.numqs=numqs
+        self.weeknum=weeknum
 
 
     def getscore(self):
@@ -32,6 +33,11 @@ class TestInfo(db.Model):
 
     def getnumqs(self):
         return self.numqs
+    
+    def getweek(self):
+        return self.weeknum
+    
+    
         
 
    
