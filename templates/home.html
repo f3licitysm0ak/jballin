@@ -141,7 +141,7 @@
 
         <div class="col wf">
           
-            <div class="card-body" style="border-radius:6px; background-color:#D57E8C;"><!--start of pink card body-->
+            <div class="card-body" style="border-radius:6px; overflow-y:scroll; max-height:332px;  background-color:#D57E8C;"><!--start of pink card body-->
             
               <h2 style="color:white;">past attempts</h2>
               <div class="row wf">
@@ -168,10 +168,10 @@
 
                   <tbody>
 
-                    {%for i in range(0, len)%}
+                    {%for i in range(len-1,0,-1)%}
                     <tr>
                       <td style="color:white;">{{attempts[i].getweek()}}</td>
-                      <td style="color:white;">{{attempts[i].getdate()}}</td>
+                      <td style="color:white;">{{attempts[i].getdate().strftime('%Y-%m-%d %I:%M %p')}}</td>
                       <td style="color:white;">{{attempts[i].getscore()}} / {{attempts[i].getnumqs()}}</td>
                       <td style="color:white;">
                         <form action="/view" method="post">

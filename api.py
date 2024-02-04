@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from application import app,db
 from userclass import User
 from datetime import datetime
+from dateutil import tz #to set appropriate timezone
 from dataclasses import dataclass
 from testinfo import TestInfo
 from testdetails import TestDetails
@@ -195,7 +196,9 @@ def login_user():
 
 @app.route('/home', methods=['GET'])
 def home():
-     
+    from_zone = tz.tzutc()
+    to_zone = tz.tzlocal()
+
 
 
     usrnm=session['username']
@@ -205,6 +208,10 @@ def home():
         testlist:List[TestInfo] = list()
         testlist=TestInfo.query.filter(TestInfo.user_id==id).all() #Trying to fetch only tests whose user id matches the current user's id
         if testlist:
+            for t in testlist:
+                t.date_taken=t.date_taken.replace(tzinfo=from_zone)
+                t.date_taken=t.date_taken.astimezone(to_zone)
+    
             return render_template("home.html", user=usrnm, len=len(testlist), attempts=testlist)
         else:
             return render_template("home.html", user=usrnm, len=0, attempts=[])
